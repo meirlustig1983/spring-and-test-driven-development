@@ -18,7 +18,7 @@ public class DeliveryAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @EqualsAndHashCode.Exclude
-    private long id;
+    private Long id;
 
     @NonNull
     private String addressLine1;

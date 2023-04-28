@@ -6,7 +6,10 @@ import lombok.NonNull;
 import java.util.Date;
 
 public record CustomerContactDto(
-        long id,
+        Long id,
+        @NonNull String firstName,
+        @NonNull String lastName,
+        @NonNull String email,
         @NonNull String addressLine1,
         String addressLine2,
         @NonNull String city,
