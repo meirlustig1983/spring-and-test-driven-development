@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +20,7 @@ public class ContactsManagementController {
     private final ContactsManagementService service;
 
     @PostMapping("/save")
-    public ResponseEntity<CustomerContactDto> addCustomerContact(CustomerContactDto dto) {
+    public ResponseEntity<CustomerContactDto> addCustomerContact(@RequestBody CustomerContactDto dto) {
         log.info("ContactsManagementController.addCustomerContact() - add customer contact");
         val customerContactFromDb = service.addCustomerContact(dto);
         if (customerContactFromDb == null) {
@@ -32,7 +29,7 @@ public class ContactsManagementController {
         return ResponseEntity.ok().body(customerContactFromDb);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/getAll")
     public ResponseEntity<List<CustomerContactDto>> listCustomerContacts() {
         log.info("ContactsManagementController.listCustomerContacts() - return all customer contacts");
         val customerContactDtoList = service.getAllCustomerContacts();
