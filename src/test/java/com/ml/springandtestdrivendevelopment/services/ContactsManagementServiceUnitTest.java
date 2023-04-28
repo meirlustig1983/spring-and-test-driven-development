@@ -14,8 +14,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -62,18 +61,18 @@ public class ContactsManagementServiceUnitTest {
 
         when(repository.save(any(CustomerContact.class))).thenReturn(customerContact);
 
-        CustomerContactDto savedContact = service.addCustomerContact(customerContactDto);
+        CustomerContactDto result = service.addCustomerContact(customerContactDto);
 
-        assertNotNull(savedContact);
-        assertNotNull(savedContact.id());
-        assertEquals("John", savedContact.firstName());
-        assertEquals("Doe", savedContact.lastName());
-        assertEquals("jd@gmail.com", savedContact.email());
-        assertEquals("1234 N 12TH ST", savedContact.addressLine1());
-        assertEquals("New York", savedContact.city());
-        assertEquals("NY", savedContact.state());
-        assertEquals("12345", savedContact.zipCode());
-        assertNotNull(savedContact.createdDate());
+        assertNotNull(result);
+        assertNotNull(result.id());
+        assertEquals("John", result.firstName());
+        assertEquals("Doe", result.lastName());
+        assertEquals("jd@gmail.com", result.email());
+        assertEquals("1234 N 12TH ST", result.addressLine1());
+        assertEquals("New York", result.city());
+        assertEquals("NY", result.state());
+        assertEquals("12345", result.zipCode());
+        assertNotNull(result.createdDate());
     }
 
     @Test
@@ -105,8 +104,60 @@ public class ContactsManagementServiceUnitTest {
 
         when(repository.findAll()).thenReturn(Collections.singletonList(customerContact));
 
-        List<CustomerContactDto> customerContactDtoList = service.getAllCustomerContacts();
-        assertNotNull(customerContactDtoList);
-        assertEquals(1, customerContactDtoList.size());
+        List<CustomerContactDto> result = service.getAllCustomerContacts();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testGetCustomerContact() {
+
+        CustomerContactDto customerContactDto = new CustomerContactDto(
+                null,
+                "John",
+                "Doe",
+                "jd@gmail.com",
+                "1234 N 12TH ST",
+                null,
+                "New York",
+                "NY",
+                "12345",
+                new Date());
+
+        CustomerContact customerContact = CustomerContact.builder()
+                .id(1L)
+                .firstName(customerContactDto.firstName())
+                .lastName(customerContactDto.lastName())
+                .email(customerContactDto.email())
+                .addressLine1(customerContactDto.addressLine1())
+                .city(customerContactDto.city())
+                .state(customerContactDto.state())
+                .zipCode(customerContactDto.zipCode())
+                .createdDate(customerContactDto.createdDate())
+                .build();
+
+        when(repository.findCustomerContactById(1L)).thenReturn(customerContact);
+
+        CustomerContactDto result = service.getCustomerContact(1L);
+
+        assertNotNull(result);
+        assertNotNull(result.id());
+        assertEquals("John", result.firstName());
+        assertEquals("Doe", result.lastName());
+        assertEquals("jd@gmail.com", result.email());
+        assertEquals("1234 N 12TH ST", result.addressLine1());
+        assertEquals("New York", result.city());
+        assertEquals("NY", result.state());
+        assertEquals("12345", result.zipCode());
+        assertNotNull(result.createdDate());
+    }
+
+    @Test
+    public void testGetCustomerContactShouldFailed() {
+        when(repository.findCustomerContactById(1L)).thenReturn(null);
+
+        CustomerContactDto result = service.getCustomerContact(1L);
+
+        assertNull(result);
     }
 }

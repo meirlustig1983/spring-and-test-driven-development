@@ -29,13 +29,23 @@ public class ContactsManagementController {
         return ResponseEntity.ok().body(customerContactFromDb);
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<CustomerContactDto>> listCustomerContacts() {
-        log.info("ContactsManagementController.listCustomerContacts() - return all customer contacts");
+    @GetMapping("/search/getAll")
+    public ResponseEntity<List<CustomerContactDto>> getCustomerContacts() {
+        log.info("ContactsManagementController.getCustomerContacts() - return all customer contacts");
         val customerContactDtoList = service.getAllCustomerContacts();
         if (customerContactDtoList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(customerContactDtoList);
+    }
+
+    @GetMapping("/search/{customerContactId}/customerContactId")
+    public ResponseEntity<CustomerContactDto> getCustomerContact(@PathVariable Long customerContactId) {
+        log.info("ContactsManagementController.getCustomerContact() - return customer contacts by id. value: {}", customerContactId);
+        val customerContactDto = service.getCustomerContact(customerContactId);
+        if (customerContactDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(customerContactDto);
     }
 }

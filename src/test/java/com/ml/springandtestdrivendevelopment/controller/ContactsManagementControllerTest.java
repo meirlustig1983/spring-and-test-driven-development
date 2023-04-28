@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -57,8 +58,18 @@ class ContactsManagementControllerTest {
     }
 
     @Test
+    void addCustomerContactTestShouldFailed() throws Exception {
+        HashMap<String, Object> hashMap = new HashMap<>();
+
+        mockMvc.perform(post("/api/v1/contacts/save")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(hashMap)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void listCustomerContactsTest() throws Exception {
-        mockMvc.perform(get("/api/v1/contacts/getAll"))
+        mockMvc.perform(get("/api/v1/contacts/search/getAll"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("1"))
                 .andExpect(jsonPath("$[0].firstName").value("John"))
@@ -80,5 +91,27 @@ class ContactsManagementControllerTest {
                 .andExpect(jsonPath("$[1].state").value("NY"))
                 .andExpect(jsonPath("$[1].zipCode").value("14006"))
                 .andExpect(jsonPath("$[1].createdDate").exists());
+    }
+
+    @Test
+    void getCustomerContactTest() throws Exception {
+        mockMvc.perform(get("/api/v1/contacts/search/1/customerContactId"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.firstName").value("John"))
+                .andExpect(jsonPath("$.lastName").value("Doe"))
+                .andExpect(jsonPath("$.email").value("jd@gmail.com"))
+                .andExpect(jsonPath("$.addressLine1").value("12001 E 42TH ST"))
+                .andExpect(jsonPath("$.addressLine2").isEmpty())
+                .andExpect(jsonPath("$.city").value("New York"))
+                .andExpect(jsonPath("$.state").value("NY"))
+                .andExpect(jsonPath("$.zipCode").value("12345"))
+                .andExpect(jsonPath("$.createdDate").exists());
+    }
+
+    @Test
+    void getCustomerContactTestShouldFailed() throws Exception {
+        mockMvc.perform(get("/api/v1/contacts/search/4/customerContactId"))
+                .andExpect(status().isNotFound());
     }
 }

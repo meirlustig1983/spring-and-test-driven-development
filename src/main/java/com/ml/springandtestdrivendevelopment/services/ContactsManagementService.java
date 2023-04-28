@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -18,7 +19,7 @@ public class ContactsManagementService {
     private final CustomerContactRepository customerContactRepository;
 
     public CustomerContactDto addCustomerContact(CustomerContactDto dto) {
-        log.info("ContactsManagementService.addCustomerContact() - add customer contact");
+        log.info("ContactsManagementService.addCustomerContact(...) - add customer contact");
         CustomerContact customerContact = customerContactRepository.save(convert(dto));
         return convert(customerContact);
     }
@@ -26,7 +27,21 @@ public class ContactsManagementService {
     public List<CustomerContactDto> getAllCustomerContacts() {
         log.info("ContactsManagementService.findCustomerContacts() - retrieving all customer contacts");
         val allCustomerContacts = customerContactRepository.findAll();
-        return convert(allCustomerContacts);
+        if (allCustomerContacts.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return convert(allCustomerContacts);
+        }
+    }
+
+    public CustomerContactDto getCustomerContact(Long customerContactId) {
+        log.info("ContactsManagementService.getCustomerContact(...) - get customer contact by id. value: {}", customerContactId);
+        CustomerContact customerContact = customerContactRepository.findCustomerContactById(customerContactId);
+        if (customerContact == null) {
+            return null;
+        } else {
+            return convert(customerContact);
+        }
     }
 
     private List<CustomerContactDto> convert(List<CustomerContact> allCustomerContacts) {

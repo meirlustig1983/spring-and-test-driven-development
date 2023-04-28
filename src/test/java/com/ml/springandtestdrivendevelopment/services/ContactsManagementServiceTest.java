@@ -12,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -57,5 +56,26 @@ class ContactsManagementServiceTest {
         List<CustomerContactDto> customerContactDtoList = service.getAllCustomerContacts();
         assertNotNull(customerContactDtoList);
         assertEquals(2, customerContactDtoList.size());
+    }
+
+    @Test
+    public void testGetCustomerContact() {
+        CustomerContactDto customerContactDto = service.getCustomerContact(1L);
+        assertNotNull(customerContactDto);
+        assertNotNull(customerContactDto.id());
+        assertEquals("John", customerContactDto.firstName());
+        assertEquals("Doe", customerContactDto.lastName());
+        assertEquals("jd@gmail.com", customerContactDto.email());
+        assertEquals("12001 E 42TH ST", customerContactDto.addressLine1());
+        assertEquals("New York", customerContactDto.city());
+        assertEquals("NY", customerContactDto.state());
+        assertEquals("12345", customerContactDto.zipCode());
+        assertNotNull(customerContactDto.createdDate());
+    }
+
+    @Test
+    public void testGetCustomerContactShouldFailed() {
+        CustomerContactDto customerContactDto = service.getCustomerContact(3L);
+        assertNull(customerContactDto);
     }
 }

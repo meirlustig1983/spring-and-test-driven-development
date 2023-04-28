@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface CustomerContactRepository extends CrudRepository<CustomerContact, Long> {
     @NonNull List<CustomerContact> findAll();
+
+    CustomerContact findCustomerContactById(Long id);
 }
