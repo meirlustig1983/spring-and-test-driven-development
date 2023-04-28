@@ -1,4 +1,4 @@
-package com.ml.springandtestdrivendevelopment.service;
+package com.ml.springandtestdrivendevelopment.services;
 
 import com.ml.springandtestdrivendevelopment.dta.CustomerContact;
 import com.ml.springandtestdrivendevelopment.repositories.CustomerContactRepository;
