@@ -11,7 +11,7 @@ public class ContactsManagementService {
     @Autowired
     private CustomerContactRepository customerContactRepository;
 
-    public CustomerContact add(CustomerContact aContact) {
+    public CustomerContact addCustomerContact(CustomerContact aContact) {
         return customerContactRepository.save(aContact);
     }
 }
