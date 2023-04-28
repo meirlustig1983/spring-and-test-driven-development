@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringJUnitConfig
@@ -73,6 +74,8 @@ public class ContactsManagementServiceUnitTest {
         assertEquals("NY", result.state());
         assertEquals("12345", result.zipCode());
         assertNotNull(result.createdDate());
+
+        verify(repository).save(any(CustomerContact.class));
     }
 
     @Test
@@ -107,6 +110,8 @@ public class ContactsManagementServiceUnitTest {
         List<CustomerContactDto> result = service.getAllCustomerContacts();
         assertNotNull(result);
         assertEquals(1, result.size());
+
+        verify(repository).findAll();
     }
 
     @Test
@@ -150,6 +155,8 @@ public class ContactsManagementServiceUnitTest {
         assertEquals("NY", result.state());
         assertEquals("12345", result.zipCode());
         assertNotNull(result.createdDate());
+
+        verify(repository).findCustomerContactById(1L);
     }
 
     @Test
@@ -159,5 +166,6 @@ public class ContactsManagementServiceUnitTest {
         CustomerContactDto result = service.getCustomerContact(1L);
 
         assertNull(result);
+        verify(repository).findCustomerContactById(1L);
     }
 }
