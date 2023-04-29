@@ -34,7 +34,7 @@ public class ContactsManagementServiceUnitTest {
     }
 
     @Test
-    public void testAddCustomerContact() {
+    public void addCustomerContact() {
 
         CustomerContactDto customerContactDto = new CustomerContactDto(
                 null,
@@ -79,7 +79,7 @@ public class ContactsManagementServiceUnitTest {
     }
 
     @Test
-    public void testGetAllCustomerContacts() {
+    public void getAllCustomerContacts() {
 
         CustomerContactDto customerContactDto = new CustomerContactDto(
                 null,
@@ -115,7 +115,7 @@ public class ContactsManagementServiceUnitTest {
     }
 
     @Test
-    public void testGetCustomerContact() {
+    public void getCustomerContactById() {
 
         CustomerContactDto customerContactDto = new CustomerContactDto(
                 null,
@@ -143,7 +143,7 @@ public class ContactsManagementServiceUnitTest {
 
         when(repository.findCustomerContactById(1L)).thenReturn(customerContact);
 
-        CustomerContactDto result = service.getCustomerContact(1L);
+        CustomerContactDto result = service.getCustomerContactById(1L);
 
         assertNotNull(result);
         assertNotNull(result.id());
@@ -160,12 +160,114 @@ public class ContactsManagementServiceUnitTest {
     }
 
     @Test
-    public void testGetCustomerContactShouldFailed() {
+    public void getCustomerContactById_ShouldFailed() {
         when(repository.findCustomerContactById(1L)).thenReturn(null);
 
-        CustomerContactDto result = service.getCustomerContact(1L);
+        CustomerContactDto result = service.getCustomerContactById(1L);
 
         assertNull(result);
         verify(repository).findCustomerContactById(1L);
+    }
+
+    @Test
+    public void getCustomerContactsByIds() {
+
+        CustomerContactDto customerContactDto = new CustomerContactDto(
+                null,
+                "John",
+                "Doe",
+                "jd@gmail.com",
+                "1234 N 12TH ST",
+                null,
+                "New York",
+                "NY",
+                "12345",
+                new Date());
+
+        CustomerContact customerContact = CustomerContact.builder()
+                .id(1L)
+                .firstName(customerContactDto.firstName())
+                .lastName(customerContactDto.lastName())
+                .email(customerContactDto.email())
+                .addressLine1(customerContactDto.addressLine1())
+                .city(customerContactDto.city())
+                .state(customerContactDto.state())
+                .zipCode(customerContactDto.zipCode())
+                .createdDate(customerContactDto.createdDate())
+                .build();
+
+        when(repository.findAllByIdIn(List.of(1L))).thenReturn(Collections.singletonList(customerContact));
+
+        List<CustomerContactDto> result = service.getCustomerContactsByIds(List.of(1L));
+        assertNotNull(result);
+        assertEquals(1, result.size());
+
+        verify(repository).findAllByIdIn(List.of(1L));
+    }
+
+    @Test
+    public void getCustomerContactsByIds_ShouldFailed() {
+        when(repository.findAllByIdIn(List.of(1L))).thenReturn(List.of());
+
+        List<CustomerContactDto> result = service.getCustomerContactsByIds(List.of(1L));
+        assertNotNull(result);
+        assertEquals(0, result.size());
+
+        verify(repository).findAllByIdIn(List.of(1L));
+    }
+
+    @Test
+    public void getCustomerContactByEmail() {
+
+        CustomerContactDto customerContactDto = new CustomerContactDto(
+                null,
+                "John",
+                "Doe",
+                "jd@gmail.com",
+                "1234 N 12TH ST",
+                null,
+                "New York",
+                "NY",
+                "12345",
+                new Date());
+
+        CustomerContact customerContact = CustomerContact.builder()
+                .id(1L)
+                .firstName(customerContactDto.firstName())
+                .lastName(customerContactDto.lastName())
+                .email(customerContactDto.email())
+                .addressLine1(customerContactDto.addressLine1())
+                .city(customerContactDto.city())
+                .state(customerContactDto.state())
+                .zipCode(customerContactDto.zipCode())
+                .createdDate(customerContactDto.createdDate())
+                .build();
+
+        when(repository.findCustomerContactByEmail("jd@gmail.com")).thenReturn(customerContact);
+
+        CustomerContactDto result = service.getCustomerContactByEmail("jd@gmail.com");
+
+        assertNotNull(result);
+        assertNotNull(result.id());
+        assertEquals("John", result.firstName());
+        assertEquals("Doe", result.lastName());
+        assertEquals("jd@gmail.com", result.email());
+        assertEquals("1234 N 12TH ST", result.addressLine1());
+        assertEquals("New York", result.city());
+        assertEquals("NY", result.state());
+        assertEquals("12345", result.zipCode());
+        assertNotNull(result.createdDate());
+
+        verify(repository).findCustomerContactByEmail("jd@gmail.com");
+    }
+
+    @Test
+    public void getCustomerContactByEmail_ShouldFailed() {
+        when(repository.findCustomerContactByEmail("jd@gmail.com")).thenReturn(null);
+
+        CustomerContactDto result = service.getCustomerContactByEmail("jd@gmail.com");
+
+        assertNull(result);
+        verify(repository).findCustomerContactByEmail("jd@gmail.com");
     }
 }

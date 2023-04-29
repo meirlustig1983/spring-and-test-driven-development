@@ -34,9 +34,29 @@ public class ContactsManagementService {
         }
     }
 
-    public CustomerContactDto getCustomerContact(Long customerContactId) {
-        log.info("ContactsManagementService.getCustomerContact(...) - get customer contact by id. value: {}", customerContactId);
+    public CustomerContactDto getCustomerContactById(Long customerContactId) {
+        log.info("ContactsManagementService.getCustomerContactById(...) - retrieving customer contact by id. value: {}", customerContactId);
         CustomerContact customerContact = customerContactRepository.findCustomerContactById(customerContactId);
+        if (customerContact == null) {
+            return null;
+        } else {
+            return convert(customerContact);
+        }
+    }
+
+    public List<CustomerContactDto> getCustomerContactsByIds(List<Long> customerContactIds) {
+        log.info("ContactsManagementService.getCustomerContactByIds(...) - retrieving customers contact by ids. value: {}", customerContactIds);
+        val customerContacts = customerContactRepository.findAllByIdIn(customerContactIds);
+        if (customerContacts.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return convert(customerContacts);
+        }
+    }
+
+    public CustomerContactDto getCustomerContactByEmail(String email) {
+        log.info("ContactsManagementService.getCustomerContactByEmail(...) - retrieving customer contact by email. value: {}", email);
+        CustomerContact customerContact = customerContactRepository.findCustomerContactByEmail(email);
         if (customerContact == null) {
             return null;
         } else {
