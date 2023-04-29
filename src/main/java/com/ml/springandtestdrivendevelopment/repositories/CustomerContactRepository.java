@@ -10,4 +10,8 @@ public interface CustomerContactRepository extends CrudRepository<CustomerContac
     @NonNull List<CustomerContact> findAll();
 
     CustomerContact findCustomerContactById(Long id);
+
+    CustomerContact findCustomerContactByEmail(String email);
+
+    @NonNull List<CustomerContact> findAllByIdIn(List<Long> ids);
 }

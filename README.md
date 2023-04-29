@@ -17,3 +17,10 @@
 * Add support for '/api/v1/contacts/search/getAll' in order to get all 'CustomerContact' objects.
 * Add support for '/api/v1/contacts/search/{customerContactId}/customerContactId' in order to get 'CustomerContact' by id.
 * Add unit tests and integration tests
+
+#### 4: Write integration tests for the repository [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/5)]
+
+* Add support for '/api/v1/contacts/save' in order to save new 'CustomerContact'.
+* Add support for '/api/v1/contacts/search' in order to get all 'CustomerContact' objects by ids.
+* Add support for '/api/v1/contacts/search/{email}/email' in order to get 'CustomerContact' by email.
+* Add unit tests and integration tests

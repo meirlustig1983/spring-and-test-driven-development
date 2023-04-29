@@ -30,7 +30,7 @@ public class ContactsManagementController {
     }
 
     @GetMapping("/search/getAll")
-    public ResponseEntity<List<CustomerContactDto>> getCustomerContacts() {
+    public ResponseEntity<List<CustomerContactDto>> getAllCustomerContacts() {
         log.info("ContactsManagementController.getCustomerContacts() - return all customer contacts");
         val customerContactDtoList = service.getAllCustomerContacts();
         if (customerContactDtoList.isEmpty()) {
@@ -40,9 +40,29 @@ public class ContactsManagementController {
     }
 
     @GetMapping("/search/{customerContactId}/customerContactId")
-    public ResponseEntity<CustomerContactDto> getCustomerContact(@PathVariable Long customerContactId) {
-        log.info("ContactsManagementController.getCustomerContact() - return customer contacts by id. value: {}", customerContactId);
-        val customerContactDto = service.getCustomerContact(customerContactId);
+    public ResponseEntity<CustomerContactDto> getCustomerContactById(@PathVariable Long customerContactId) {
+        log.info("ContactsManagementController.getCustomerContactById() - return customer contacts by id. value: {}", customerContactId);
+        val customerContactDto = service.getCustomerContactById(customerContactId);
+        if (customerContactDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(customerContactDto);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CustomerContactDto>> getCustomerContactsByIds(@RequestParam List<Long> customerContactIds) {
+        log.info("ContactsManagementController.getCustomerContactsByIds() - return customer contacts by id. value: {}", customerContactIds);
+        val customerContactDtoList = service.getCustomerContactsByIds(customerContactIds);
+        if (customerContactDtoList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(customerContactDtoList);
+    }
+
+    @GetMapping("/search/{email}/email")
+    public ResponseEntity<CustomerContactDto> getCustomerContactByEmail(@PathVariable String email) {
+        log.info("ContactsManagementController.getCustomerContactByEmail() - return customer contacts by email. value: {}", email);
+        val customerContactDto = service.getCustomerContactByEmail(email);
         if (customerContactDto == null) {
             return ResponseEntity.notFound().build();
         }
