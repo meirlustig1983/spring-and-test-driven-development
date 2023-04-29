@@ -18,7 +18,7 @@ public class CustomerContact {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @EqualsAndHashCode.Exclude
-    private long id;
+    private Long id;
 
     @NonNull
     private String firstName;

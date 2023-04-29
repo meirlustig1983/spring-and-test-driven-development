@@ -1,6 +1,6 @@
 package com.ml.springandtestdrivendevelopment.services;
 
-import com.ml.springandtestdrivendevelopment.dta.CustomerContact;
+import com.ml.springandtestdrivendevelopment.dto.CustomerContactDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -9,8 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -19,30 +21,61 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class ContactsManagementServiceTest {
 
     @Autowired
-    private ContactsManagementService contactsManagementService;
+    private ContactsManagementService service;
 
     @Test
     public void testAddCustomerContact() {
-        CustomerContact.CustomerContactBuilder builder = CustomerContact.builder();
-        CustomerContact newContact = builder
-                .firstName("John")
-                .lastName("Doe")
-                .email("jd@gmail.com")
-                .addressLine1("1234 N 12TH ST")
-                .city("New York")
-                .state("NY")
-                .zipCode("12345")
-                .build();
 
-        CustomerContact savedContact = contactsManagementService.addCustomerContact(newContact);
+        CustomerContactDto customerContactDto = new CustomerContactDto(
+                null,
+                "John",
+                "Doe",
+                "jd@gmail.com",
+                "1234 N 12TH ST",
+                null,
+                "New York",
+                "NY",
+                "12345",
+                new Date());
+
+        CustomerContactDto savedContact = service.addCustomerContact(customerContactDto);
         assertNotNull(savedContact);
-        assertEquals(1L, savedContact.getId());
-        assertEquals("John", savedContact.getFirstName());
-        assertEquals("Doe", savedContact.getLastName());
-        assertEquals("jd@gmail.com", savedContact.getEmail());
-        assertEquals("1234 N 12TH ST", savedContact.getAddressLine1());
-        assertEquals("New York", savedContact.getCity());
-        assertEquals("NY", savedContact.getState());
-        assertEquals("12345", savedContact.getZipCode());
+        assertNotNull(savedContact.id());
+        assertEquals("John", savedContact.firstName());
+        assertEquals("Doe", savedContact.lastName());
+        assertEquals("jd@gmail.com", savedContact.email());
+        assertEquals("1234 N 12TH ST", savedContact.addressLine1());
+        assertEquals("New York", savedContact.city());
+        assertEquals("NY", savedContact.state());
+        assertEquals("12345", savedContact.zipCode());
+        assertNotNull(savedContact.createdDate());
+    }
+
+    @Test
+    public void testGetAllCustomerContacts() {
+        List<CustomerContactDto> customerContactDtoList = service.getAllCustomerContacts();
+        assertNotNull(customerContactDtoList);
+        assertEquals(2, customerContactDtoList.size());
+    }
+
+    @Test
+    public void testGetCustomerContact() {
+        CustomerContactDto customerContactDto = service.getCustomerContact(1L);
+        assertNotNull(customerContactDto);
+        assertNotNull(customerContactDto.id());
+        assertEquals("John", customerContactDto.firstName());
+        assertEquals("Doe", customerContactDto.lastName());
+        assertEquals("jd@gmail.com", customerContactDto.email());
+        assertEquals("12001 E 42TH ST", customerContactDto.addressLine1());
+        assertEquals("New York", customerContactDto.city());
+        assertEquals("NY", customerContactDto.state());
+        assertEquals("12345", customerContactDto.zipCode());
+        assertNotNull(customerContactDto.createdDate());
+    }
+
+    @Test
+    public void testGetCustomerContactShouldFailed() {
+        CustomerContactDto customerContactDto = service.getCustomerContact(3L);
+        assertNull(customerContactDto);
     }
 }
