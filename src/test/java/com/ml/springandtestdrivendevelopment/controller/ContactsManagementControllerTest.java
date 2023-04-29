@@ -68,7 +68,7 @@ class ContactsManagementControllerTest {
     }
 
     @Test
-    void listCustomerContactsTest() throws Exception {
+    void getCustomerContactsTest() throws Exception {
         mockMvc.perform(get("/api/v1/contacts/search/getAll"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("1"))
