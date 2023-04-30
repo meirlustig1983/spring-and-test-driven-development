@@ -20,8 +20,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "/data/test-datasets.sql")
-class ContactsManagementControllerIT {
+@Sql(scripts = "/data/test-datasets.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/data/delete-datasets.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+public class ContactsManagementControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +49,7 @@ class ContactsManagementControllerIT {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(customerContactDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(jsonPath("$.firstName").value("Meir"))
                 .andExpect(jsonPath("$.lastName").value("Lustig"))
                 .andExpect(jsonPath("$.email").value("ml@gmail.com"))
