@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 @Transactional
 @Sql(scripts = "/data/test-datasets.sql")
-class ContactsManagementServiceIT {
+public class ContactsManagementServiceIT {
 
     @Autowired
     private ContactsManagementService service;

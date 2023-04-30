@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringJUnitConfig
-class ContactsManagementControllerUnitTest {
+public class ContactsManagementControllerUnitTest {
 
     @Mock
     private ContactsManagementService service;
