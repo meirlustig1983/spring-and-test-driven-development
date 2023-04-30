@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Date;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql(scripts = "/data/test-datasets.sql")
 class ContactsManagementControllerIT {
 
     @Autowired
@@ -28,32 +30,33 @@ class ContactsManagementControllerIT {
     private ObjectMapper objectMapper;
 
     @Test
+    @Sql(scripts = "/data/delete-datasets.sql")
     public void addCustomerContact() throws Exception {
         CustomerContactDto customerContactDto = new CustomerContactDto(
                 null,
-                "John",
-                "Doe",
-                "jd@gmail.com",
-                "1234 N 12TH ST",
+                "Meir",
+                "Lustig",
+                "ml@gmail.com",
+                "1407 W 32TH ST",
                 null,
-                "New York",
+                "Brooklyn",
                 "NY",
-                "12345",
+                "763215",
                 new Date());
 
         mockMvc.perform(post("/api/v1/contacts/save")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(customerContactDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("3"))
-                .andExpect(jsonPath("$.firstName").value("John"))
-                .andExpect(jsonPath("$.lastName").value("Doe"))
-                .andExpect(jsonPath("$.email").value("jd@gmail.com"))
-                .andExpect(jsonPath("$.addressLine1").value("1234 N 12TH ST"))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.firstName").value("Meir"))
+                .andExpect(jsonPath("$.lastName").value("Lustig"))
+                .andExpect(jsonPath("$.email").value("ml@gmail.com"))
+                .andExpect(jsonPath("$.addressLine1").value("1407 W 32TH ST"))
                 .andExpect(jsonPath("$.addressLine2").isEmpty())
-                .andExpect(jsonPath("$.city").value("New York"))
+                .andExpect(jsonPath("$.city").value("Brooklyn"))
                 .andExpect(jsonPath("$.state").value("NY"))
-                .andExpect(jsonPath("$.zipCode").value("12345"))
+                .andExpect(jsonPath("$.zipCode").value("763215"))
                 .andExpect(jsonPath("$.createdDate").exists());
     }
 

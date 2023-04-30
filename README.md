@@ -24,3 +24,9 @@
 * Add support for '/api/v1/contacts/search' in order to get all 'CustomerContact' objects by ids.
 * Add support for '/api/v1/contacts/search/{email}/email' in order to get 'CustomerContact' by email.
 * Add unit tests and integration tests
+
+#### 5: Use SQL scripts in order to load DataSets to the local H2 DB [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/6)]
+
+* Create 'test-datasets.sql' SQL file in order to load the DataSet to H2.
+* Create 'delete-datasets.sql' SQL file in order to clean the DB.
+* Edit all IT classes to use the DataSet files using @Sql
