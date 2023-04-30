@@ -31,7 +31,11 @@
 * Create 'delete-datasets.sql' SQL file in order to clean the DB.
 * Edit all IT classes to use the DataSet files using @Sql
 
-#### 5: Add a SuiteTest for CustomerContent [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/7)]
+#### 6: Add a SuiteTest for CustomerContent [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/7)]
 
 * Edit 'build.gradle' file with dependencies for SuiteTest. [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/7/files#diff-49a96e7eea8a94af862798a45174e6ac43eb4f8b4bd40759b5da63ba31ec3ef7R29)]
 * Create new suite test class [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/7/files#diff-7b196dd5e5e6fa473e94bbe5d13833e3c06e700afd6f12927794c9da660b7122R1)]
+
+#### 7: Start to use application.yml file [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/8)]
+
+* Convert 'application.properties' to 'application.yml'
