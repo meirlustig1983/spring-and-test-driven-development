@@ -2,6 +2,7 @@ package com.ml.springandtestdrivendevelopment.services;
 
 import com.ml.springandtestdrivendevelopment.dta.CustomerContact;
 import com.ml.springandtestdrivendevelopment.dto.CustomerContactDto;
+import com.ml.springandtestdrivendevelopment.mappers.CustomerContactMapper;
 import com.ml.springandtestdrivendevelopment.repositories.CustomerContactRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,15 +17,16 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringJUnitConfig
 public class ContactsManagementServiceUnitTest {
 
     @Mock
     private CustomerContactRepository repository;
+
+    @Mock
+    private CustomerContactMapper mapper;
 
     @InjectMocks
     private ContactsManagementService service;
@@ -61,7 +63,9 @@ public class ContactsManagementServiceUnitTest {
                 .createdDate(customerContactDto.createdDate())
                 .build();
 
-        when(repository.save(any(CustomerContact.class))).thenReturn(customerContact);
+        when(repository.save(customerContact)).thenReturn(customerContact);
+        when(mapper.toEntity(customerContactDto)).thenReturn(customerContact);
+        when(mapper.toDto(customerContact)).thenReturn(customerContactDto.withId(1L));
 
         CustomerContactDto result = service.addCustomerContact(customerContactDto);
 
@@ -76,7 +80,10 @@ public class ContactsManagementServiceUnitTest {
         assertEquals("12345", result.zipCode());
         assertNotNull(result.createdDate());
 
-        verify(repository).save(any(CustomerContact.class));
+        verify(repository).save(customerContact);
+        verify(mapper).toEntity(customerContactDto);
+        verify(mapper).toDto(customerContact);
+        verifyNoMoreInteractions(repository, mapper);
     }
 
     @Test
@@ -107,12 +114,15 @@ public class ContactsManagementServiceUnitTest {
                 .build();
 
         when(repository.findAll()).thenReturn(Collections.singletonList(customerContact));
+        when(mapper.toDtos(List.of(customerContact))).thenReturn(List.of(customerContactDto.withId(1L)));
 
         List<CustomerContactDto> result = service.getAllCustomerContacts();
         assertNotNull(result);
         assertEquals(1, result.size());
 
         verify(repository).findAll();
+        verify(mapper).toDtos(List.of(customerContact));
+        verifyNoMoreInteractions(repository, mapper);
     }
 
     @Test
@@ -143,6 +153,7 @@ public class ContactsManagementServiceUnitTest {
                 .build();
 
         when(repository.findCustomerContactById(1L)).thenReturn(Optional.of(customerContact));
+        when(mapper.toDto(customerContact)).thenReturn(customerContactDto.withId(1L));
 
         CustomerContactDto result = service.getCustomerContactById(1L);
 
@@ -158,6 +169,8 @@ public class ContactsManagementServiceUnitTest {
         assertNotNull(result.createdDate());
 
         verify(repository).findCustomerContactById(1L);
+        verify(mapper).toDto(customerContact);
+        verifyNoMoreInteractions(repository, mapper);
     }
 
     @Test
@@ -168,6 +181,7 @@ public class ContactsManagementServiceUnitTest {
 
         assertNull(result);
         verify(repository).findCustomerContactById(1L);
+        verifyNoMoreInteractions(repository, mapper);
     }
 
     @Test
@@ -198,12 +212,15 @@ public class ContactsManagementServiceUnitTest {
                 .build();
 
         when(repository.findAllByIdIn(List.of(1L))).thenReturn(Collections.singletonList(customerContact));
+        when(mapper.toDtos(List.of(customerContact))).thenReturn(List.of(customerContactDto.withId(1L)));
 
         List<CustomerContactDto> result = service.getCustomerContactsByIds(List.of(1L));
         assertNotNull(result);
         assertEquals(1, result.size());
 
         verify(repository).findAllByIdIn(List.of(1L));
+        verify(mapper).toDtos(List.of(customerContact));
+        verifyNoMoreInteractions(repository, mapper);
     }
 
     @Test
@@ -215,6 +232,7 @@ public class ContactsManagementServiceUnitTest {
         assertEquals(0, result.size());
 
         verify(repository).findAllByIdIn(List.of(1L));
+        verifyNoMoreInteractions(repository, mapper);
     }
 
     @Test
@@ -244,7 +262,8 @@ public class ContactsManagementServiceUnitTest {
                 .createdDate(customerContactDto.createdDate())
                 .build();
 
-        when(repository.findCustomerContactByEmail("jd@gmail.com")).thenReturn(customerContact);
+        when(repository.findCustomerContactByEmail("jd@gmail.com")).thenReturn(Optional.of(customerContact));
+        when(mapper.toDto(customerContact)).thenReturn(customerContactDto.withId(1L));
 
         CustomerContactDto result = service.getCustomerContactByEmail("jd@gmail.com");
 
@@ -260,15 +279,18 @@ public class ContactsManagementServiceUnitTest {
         assertNotNull(result.createdDate());
 
         verify(repository).findCustomerContactByEmail("jd@gmail.com");
+        verify(mapper).toDto(customerContact);
+        verifyNoMoreInteractions(repository, mapper);
     }
 
     @Test
     public void getCustomerContactByEmail_ShouldFailed() {
-        when(repository.findCustomerContactByEmail("jd@gmail.com")).thenReturn(null);
+        when(repository.findCustomerContactByEmail("jd@gmail.com")).thenReturn(Optional.empty());
 
         CustomerContactDto result = service.getCustomerContactByEmail("jd@gmail.com");
 
         assertNull(result);
         verify(repository).findCustomerContactByEmail("jd@gmail.com");
+        verifyNoMoreInteractions(repository, mapper);
     }
 }

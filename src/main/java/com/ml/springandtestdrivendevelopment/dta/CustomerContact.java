@@ -12,7 +12,8 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "customer_contact", indexes = {
-        @Index(name = "idx_customer_contact_id_email", columnList = "id, email")
+        @Index(name = "idx_customer_contact_id", columnList = "id"),
+        @Index(name = "idx_customer_contact_email", columnList = "email")
 })
 @BatchSize(size = 10)
 public class CustomerContact {

@@ -5,16 +5,14 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
+@Value
 @EqualsAndHashCode(callSuper = true)
-@Builder
 @NoArgsConstructor(force = true)
-@AllArgsConstructor
-@Data
 public class ApiMethodException extends RuntimeException {
 
-    private final String path;
-    private final HttpStatus statusCode;
-    private final LocalDateTime localDateTime;
+    String path;
+    HttpStatus statusCode;
+    LocalDateTime localDateTime;
 
     public ApiMethodException(String path, String message, HttpStatus statusCode, LocalDateTime localDateTime) {
         super(message);

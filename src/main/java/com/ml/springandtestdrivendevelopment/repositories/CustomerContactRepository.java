@@ -15,7 +15,9 @@ public interface CustomerContactRepository extends CrudRepository<CustomerContac
     @Query("SELECT c FROM CustomerContact c WHERE c.id = :id")
     Optional<CustomerContact> findCustomerContactById(@Param("id") Long id);
 
-    CustomerContact findCustomerContactByEmail(String email);
+    @Query("SELECT c FROM CustomerContact c WHERE c.email = :email")
+    Optional<CustomerContact> findCustomerContactByEmail(String email);
 
-    @NonNull List<CustomerContact> findAllByIdIn(List<Long> ids);
+    @Query("SELECT c FROM CustomerContact c WHERE c.id IN :ids")
+    List<CustomerContact> findAllByIdIn(List<Long> ids);
 }

@@ -148,7 +148,7 @@ public class ContactsManagementControllerIT {
 
     @Test
     public void getCustomerContactsByIds() throws Exception {
-        mockMvc.perform(get("/api/v1/contacts/search?customerContactIds=1,2,3"))
+        mockMvc.perform(get("/api/v1/contacts/search?ids=1,2,3"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("1"))
                 .andExpect(jsonPath("$[0].firstName").value("John"))
@@ -174,7 +174,7 @@ public class ContactsManagementControllerIT {
 
     @Test
     public void getCustomerContactsByIds_CustomerContactIdIsNotExists_ShouldFailed() throws Exception {
-        mockMvc.perform(get("/api/v1/contacts/search?customerContactIds=4"))
+        mockMvc.perform(get("/api/v1/contacts/search?ids=4"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.path").value("/search"))
                 .andExpect(jsonPath("$.message").value("Search method has been failed, please check your input."))
@@ -184,7 +184,7 @@ public class ContactsManagementControllerIT {
 
     @Test
     public void getCustomerContactsByIds_CustomerContactIdIsString_ShouldFailed() throws Exception {
-        mockMvc.perform(get("/api/v1/contacts/search?customerContactIds=4g"))
+        mockMvc.perform(get("/api/v1/contacts/search?ids=4g"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.path").value("Unknown"))
                 .andExpect(jsonPath("$.message").value("Unhandled exception occurred. Please check the request content."))

@@ -126,10 +126,10 @@ public class CustomerContactRepositoryIT {
         entityManager.flush();
 
         // When
-        CustomerContact contact = repository.findCustomerContactByEmail(customerContact2.getEmail());
+        Optional<CustomerContact> contact = repository.findCustomerContactByEmail(customerContact2.getEmail());
 
         // Then
-        assertThat(contact).isEqualTo(customerContact2);
+        assertThat(contact.get()).isEqualTo(customerContact2);
     }
 
     @Test
