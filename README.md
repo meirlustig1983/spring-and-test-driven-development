@@ -1,6 +1,6 @@
 # Spring And Test Driven Development
 
-### Branches list:
+### Features list:
 
 #### 1: Write integration tests for the service class [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/1)]
 
@@ -12,9 +12,7 @@
 
 #### 2: Write unit tests for the service class [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/2)]
 
-*
-
-New [Unit Tests](https://github.com/meirlustig1983/spring-and-test-driven-development/blob/main/src/test/java/com/ml/springandtestdrivendevelopment/services/ContactsManagementServiceUnitTest.java)
+* New [Unit Tests](https://github.com/meirlustig1983/spring-and-test-driven-development/blob/main/src/test/java/com/ml/springandtestdrivendevelopment/services/ContactsManagementServiceUnitTest.java)
 for 'ContactsManagementService' using @SpringJUnitConfig.
 
 #### 3: Write unit tests and integration tests for the controller [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/4)]
