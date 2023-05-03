@@ -1,10 +1,8 @@
 package com.ml.springandtestdrivendevelopment.dta;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.Date;
 
@@ -13,6 +11,10 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 @Entity
+@Table(name = "customer_contact", indexes = {
+        @Index(name = "idx_customer_contact_id_email", columnList = "id, email")
+})
+@BatchSize(size = 10)
 public class CustomerContact {
 
     @Id

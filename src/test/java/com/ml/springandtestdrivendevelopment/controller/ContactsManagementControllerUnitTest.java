@@ -1,6 +1,7 @@
 package com.ml.springandtestdrivendevelopment.controller;
 
 import com.ml.springandtestdrivendevelopment.dto.CustomerContactDto;
+import com.ml.springandtestdrivendevelopment.exceptions.ApiMethodException;
 import com.ml.springandtestdrivendevelopment.services.ContactsManagementService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,8 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -79,12 +79,7 @@ public class ContactsManagementControllerUnitTest {
                 new Date());
 
         when(service.addCustomerContact(customerContactDto)).thenReturn(null);
-
-        ResponseEntity<CustomerContactDto> result = controller.addCustomerContact(customerContactDto);
-        assertNotNull(result);
-        assertEquals(400, result.getStatusCode().value());
-
-        verify(service).addCustomerContact(customerContactDto);
+        assertThrows(ApiMethodException.class, () -> controller.addCustomerContact(customerContactDto));
     }
 
     @Test
@@ -125,7 +120,8 @@ public class ContactsManagementControllerUnitTest {
 
         ResponseEntity<List<CustomerContactDto>> result = controller.getAllCustomerContacts();
         assertNotNull(result);
-        assertEquals(404, result.getStatusCode().value());
+        assertEquals(200, result.getStatusCode().value());
+        assertTrue(Objects.requireNonNull(result.getBody()).isEmpty());
 
         verify(service).getAllCustomerContacts();
     }
@@ -164,12 +160,7 @@ public class ContactsManagementControllerUnitTest {
     @Test
     public void getCustomerContactById_ShouldFailed() {
         when(service.getCustomerContactById(1L)).thenReturn(null);
-
-        ResponseEntity<CustomerContactDto> result = controller.getCustomerContactById(1L);
-        assertNotNull(result);
-        assertEquals(404, result.getStatusCode().value());
-
-        verify(service).getCustomerContactById(1L);
+        assertThrows(ApiMethodException.class, () -> controller.getCustomerContactById(1L));
     }
 
     @Test
@@ -206,14 +197,8 @@ public class ContactsManagementControllerUnitTest {
 
     @Test
     public void getCustomerContactsByIds_ShouldFailed() {
-
         when(service.getCustomerContactsByIds(List.of(1L))).thenReturn(List.of());
-
-        ResponseEntity<List<CustomerContactDto>> result = controller.getCustomerContactsByIds(List.of(1L));
-        assertNotNull(result);
-        assertEquals(404, result.getStatusCode().value());
-
-        verify(service).getCustomerContactsByIds(List.of(1L));
+        assertThrows(ApiMethodException.class, () -> controller.getCustomerContactsByIds(List.of(1L)));
     }
 
     @Test
@@ -250,11 +235,6 @@ public class ContactsManagementControllerUnitTest {
     @Test
     public void getCustomerContactByEmail_ShouldFailed() {
         when(service.getCustomerContactByEmail("jd@gmail.com")).thenReturn(null);
-
-        ResponseEntity<CustomerContactDto> result = controller.getCustomerContactByEmail("jd@gmail.com");
-        assertNotNull(result);
-        assertEquals(404, result.getStatusCode().value());
-
-        verify(service).getCustomerContactByEmail("jd@gmail.com");
+        assertThrows(ApiMethodException.class, () -> controller.getCustomerContactByEmail("jd@gmail.com"));
     }
 }

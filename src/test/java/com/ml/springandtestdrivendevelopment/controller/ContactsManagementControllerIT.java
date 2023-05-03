@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -68,7 +69,19 @@ public class ContactsManagementControllerIT {
         mockMvc.perform(post("/api/v1/contacts/save")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(hashMap)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.path").value("/save"))
+                .andExpect(jsonPath("$.message").value("Unhandled exception occurred. Body content isn't readable"))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.path").isNotEmpty());
+    }
+
+    @Test
+    @Sql(scripts = "/data/delete-datasets.sql")
+    public void getAllCustomerContacts_BodyIsNull() throws Exception {
+        mockMvc.perform(get("/api/v1/contacts/search/getAll"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
     }
 
     @Test
@@ -114,9 +127,23 @@ public class ContactsManagementControllerIT {
     }
 
     @Test
-    public void getCustomerContactById_ShouldFailed() throws Exception {
+    public void getCustomerContactById_CustomerContactIdIsNotExists_ShouldFailed() throws Exception {
         mockMvc.perform(get("/api/v1/contacts/search/4/customerContactId"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.path").value("/search/{customerContactId}/customerContactId"))
+                .andExpect(jsonPath("$.message").value("Search method has been failed, please check your input."))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.path").isNotEmpty());
+    }
+
+    @Test
+    public void getCustomerContactById_CustomerContactIdIsString_ShouldFailed() throws Exception {
+        mockMvc.perform(get("/api/v1/contacts/search/a/customerContactId"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.path").value("Unknown"))
+                .andExpect(jsonPath("$.message").value("Unhandled exception occurred. Please check the request content."))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.path").isNotEmpty());
     }
 
     @Test
@@ -146,14 +173,28 @@ public class ContactsManagementControllerIT {
     }
 
     @Test
-    public void getCustomerContactsByIds_ShouldFailed() throws Exception {
+    public void getCustomerContactsByIds_CustomerContactIdIsNotExists_ShouldFailed() throws Exception {
         mockMvc.perform(get("/api/v1/contacts/search?customerContactIds=4"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.path").value("/search"))
+                .andExpect(jsonPath("$.message").value("Search method has been failed, please check your input."))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.path").isNotEmpty());
+    }
+
+    @Test
+    public void getCustomerContactsByIds_CustomerContactIdIsString_ShouldFailed() throws Exception {
+        mockMvc.perform(get("/api/v1/contacts/search?customerContactIds=4g"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.path").value("Unknown"))
+                .andExpect(jsonPath("$.message").value("Unhandled exception occurred. Please check the request content."))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.path").isNotEmpty());
     }
 
     @Test
     public void getCustomerContactByEmail() throws Exception {
-        mockMvc.perform(get("/api/v1/contacts/search/jd@gmail.com/email"))
+        mockMvc.perform(get("/api/v1/contacts/search/email?email=jd@gmail.com"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.firstName").value("John"))
@@ -168,8 +209,22 @@ public class ContactsManagementControllerIT {
     }
 
     @Test
-    public void getCustomerContactByEmail_ShouldFailed() throws Exception {
-        mockMvc.perform(get("/api/v1/contacts/search/dfsd@mail.com/email"))
-                .andExpect(status().isNotFound());
+    public void getCustomerContactByEmail_EmailIsNotExists_ShouldFailed() throws Exception {
+        mockMvc.perform(get("/api/v1/contacts/search/email?email=jdfv@gmail.com"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.path").value("/search/{email}/email"))
+                .andExpect(jsonPath("$.message").value("Search method has been failed, please check your input."))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.path").isNotEmpty());
+    }
+
+    @Test
+    public void getCustomerContactByEmail_EmailValueIsNull_ShouldFailed() throws Exception {
+        mockMvc.perform(get("/api/v1/contacts/search/email"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.path").value("Unknown"))
+                .andExpect(jsonPath("$.message").value("Unhandled exception occurred. Please check the request content."))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.path").isNotEmpty());
     }
 }
