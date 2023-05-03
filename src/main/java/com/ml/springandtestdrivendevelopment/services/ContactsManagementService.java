@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,12 +37,8 @@ public class ContactsManagementService {
 
     public CustomerContactDto getCustomerContactById(Long customerContactId) {
         log.info("ContactsManagementService.getCustomerContactById(...) - retrieving customer contact by id. value: {}", customerContactId);
-        CustomerContact customerContact = customerContactRepository.findCustomerContactById(customerContactId);
-        if (customerContact == null) {
-            return null;
-        } else {
-            return convert(customerContact);
-        }
+        Optional<CustomerContact> customerContact = customerContactRepository.findCustomerContactById(customerContactId);
+        return customerContact.map(this::convert).orElse(null);
     }
 
     public List<CustomerContactDto> getCustomerContactsByIds(List<Long> customerContactIds) {

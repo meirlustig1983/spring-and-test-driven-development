@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -141,7 +142,7 @@ public class ContactsManagementServiceUnitTest {
                 .createdDate(customerContactDto.createdDate())
                 .build();
 
-        when(repository.findCustomerContactById(1L)).thenReturn(customerContact);
+        when(repository.findCustomerContactById(1L)).thenReturn(Optional.of(customerContact));
 
         CustomerContactDto result = service.getCustomerContactById(1L);
 
@@ -161,7 +162,7 @@ public class ContactsManagementServiceUnitTest {
 
     @Test
     public void getCustomerContactById_ShouldFailed() {
-        when(repository.findCustomerContactById(1L)).thenReturn(null);
+        when(repository.findCustomerContactById(1L)).thenReturn(Optional.empty());
 
         CustomerContactDto result = service.getCustomerContactById(1L);
 

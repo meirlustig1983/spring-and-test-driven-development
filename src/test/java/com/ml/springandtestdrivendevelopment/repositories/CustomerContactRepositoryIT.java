@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -88,10 +89,10 @@ public class CustomerContactRepositoryIT {
         entityManager.flush();
 
         // When
-        CustomerContact contact = repository.findCustomerContactById(customerContact2.getId());
+        Optional<CustomerContact> contact = repository.findCustomerContactById(customerContact2.getId());
 
         // Then
-        assertThat(contact).isEqualTo(customerContact2);
+        assertThat(contact.get()).isEqualTo(customerContact2);
     }
 
     @Test

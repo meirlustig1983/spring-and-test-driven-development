@@ -19,3 +19,7 @@ logging:
       springframework:
         web: INFO
         security: INFO
+
+spring:
+  jpa:
+    open-in-view: false

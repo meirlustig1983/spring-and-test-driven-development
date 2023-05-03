@@ -1,14 +1,17 @@
 package com.ml.springandtestdrivendevelopment.controller;
 
 import com.ml.springandtestdrivendevelopment.dto.CustomerContactDto;
+import com.ml.springandtestdrivendevelopment.exceptions.ApiMethodException;
 import com.ml.springandtestdrivendevelopment.services.ContactsManagementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -24,7 +27,7 @@ public class ContactsManagementController {
         log.info("ContactsManagementController.addCustomerContact() - add customer contact");
         val customerContactFromDb = service.addCustomerContact(dto);
         if (customerContactFromDb == null) {
-            return ResponseEntity.badRequest().build();
+            throw new ApiMethodException("/save", "Save method has been failed, please check your input.", HttpStatus.BAD_REQUEST, LocalDateTime.now());
         }
         return ResponseEntity.ok().body(customerContactFromDb);
     }
@@ -33,9 +36,6 @@ public class ContactsManagementController {
     public ResponseEntity<List<CustomerContactDto>> getAllCustomerContacts() {
         log.info("ContactsManagementController.getCustomerContacts() - return all customer contacts");
         val customerContactDtoList = service.getAllCustomerContacts();
-        if (customerContactDtoList.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().body(customerContactDtoList);
     }
 
@@ -44,7 +44,7 @@ public class ContactsManagementController {
         log.info("ContactsManagementController.getCustomerContactById() - return customer contacts by id. value: {}", customerContactId);
         val customerContactDto = service.getCustomerContactById(customerContactId);
         if (customerContactDto == null) {
-            return ResponseEntity.notFound().build();
+            throw new ApiMethodException("/search/{customerContactId}/customerContactId", "Search method has been failed, please check your input.", HttpStatus.NOT_FOUND, LocalDateTime.now());
         }
         return ResponseEntity.ok().body(customerContactDto);
     }
@@ -54,17 +54,17 @@ public class ContactsManagementController {
         log.info("ContactsManagementController.getCustomerContactsByIds() - return customer contacts by id. value: {}", customerContactIds);
         val customerContactDtoList = service.getCustomerContactsByIds(customerContactIds);
         if (customerContactDtoList.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new ApiMethodException("/search", "Search method has been failed, please check your input.", HttpStatus.NOT_FOUND, LocalDateTime.now());
         }
         return ResponseEntity.ok().body(customerContactDtoList);
     }
 
-    @GetMapping("/search/{email}/email")
-    public ResponseEntity<CustomerContactDto> getCustomerContactByEmail(@PathVariable String email) {
+    @GetMapping("/search/email")
+    public ResponseEntity<CustomerContactDto> getCustomerContactByEmail(@RequestParam String email) {
         log.info("ContactsManagementController.getCustomerContactByEmail() - return customer contacts by email. value: {}", email);
         val customerContactDto = service.getCustomerContactByEmail(email);
         if (customerContactDto == null) {
-            return ResponseEntity.notFound().build();
+            throw new ApiMethodException("/search/{email}/email", "Search method has been failed, please check your input.", HttpStatus.NOT_FOUND, LocalDateTime.now());
         }
         return ResponseEntity.ok().body(customerContactDto);
     }
