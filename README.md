@@ -47,14 +47,14 @@ for 'ContactsManagementService' using @SpringJUnitConfig.
 
 * 'application.properties' file has been converted to 'application.yml'
 
-#### 7: Add 'ExceptionHandler' [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9)]
+#### 8: Add 'ExceptionHandler' [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9)]
 
 * New 'Record' has been added. The ['ApiError'](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9/files#diff-f9e08e93418871579789755a3b47f9223e3e4090bda2306e37d223b688712270R1) is a return object when exception has benn thrown.
 * New 'Exception' has been added. The ['ApiMethodException'](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9/files#diff-0c5da622f29bde94216012a0e1ab9669225620b52517f2594091ecc8eea71733R1) will be thrown when a lack of information condition occurs.
 * ['DefaultExceptionHandler'](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9/files#diff-61376bb15e54d97ee062ac5aab7a266c70afe0f31448bf49596afa3dc13c7912R1) has been added.
 * Unit tests and integration tests has been added.
 
-#### 7: Improve Performance [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/10)]
+#### 9: Improve Performance [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/10)]
 
 * Clean old code.
 * Add new @Index to @Table("customer_contact") [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/11/files#diff-98c07a35ad1972afa552c71a64bb3b60d1ef733cf9951396d30fce543880c4cbR15)]
