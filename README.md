@@ -31,9 +31,9 @@ for 'ContactsManagementService' using @SpringJUnitConfig.
 
 #### 5: Use SQL scripts in order to load DataSets to the local H2 DB [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/6)]
 
-* A new SQL script has been created, the script 'test-datasets.sql' will create data-set of 'CustomerContact' objects
+* New SQL script has been created, the script 'test-datasets.sql' will create data-set of 'CustomerContact' objects
   for ITs.
-* A new SQL script has been created, the script 'delete-datasets.sql' will clean the DB after each method.
+* New SQL script has been created, the script 'delete-datasets.sql' will clean the DB after each method.
 * Modify all IT classes to use the DataSet files using @Sql
 
 #### 6: Add a SuiteTest for CustomerContent [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/7)]
@@ -49,7 +49,15 @@ for 'ContactsManagementService' using @SpringJUnitConfig.
 
 #### 7: Add 'ExceptionHandler' [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9)]
 
-* A new 'Record' has been added. The ['ApiError'](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9/files#diff-f9e08e93418871579789755a3b47f9223e3e4090bda2306e37d223b688712270R1) is a return object when exception has benn thrown.
-* A new 'Exception' has been added. The ['ApiMethodException'](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9/files#diff-0c5da622f29bde94216012a0e1ab9669225620b52517f2594091ecc8eea71733R1) will be thrown when a lack of information condition occurs.
-* A ['DefaultExceptionHandler'](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9/files#diff-61376bb15e54d97ee062ac5aab7a266c70afe0f31448bf49596afa3dc13c7912R1) has been added.
+* New 'Record' has been added. The ['ApiError'](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9/files#diff-f9e08e93418871579789755a3b47f9223e3e4090bda2306e37d223b688712270R1) is a return object when exception has benn thrown.
+* New 'Exception' has been added. The ['ApiMethodException'](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9/files#diff-0c5da622f29bde94216012a0e1ab9669225620b52517f2594091ecc8eea71733R1) will be thrown when a lack of information condition occurs.
+* ['DefaultExceptionHandler'](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/9/files#diff-61376bb15e54d97ee062ac5aab7a266c70afe0f31448bf49596afa3dc13c7912R1) has been added.
+* Unit tests and integration tests has been added.
+
+#### 7: Improve Performance [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/10)]
+
+* Clean old code.
+* Add new @Index to @Table("customer_contact") [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/11/files#diff-98c07a35ad1972afa552c71a64bb3b60d1ef733cf9951396d30fce543880c4cbR15)]
+* Set all @Indexes as 'unique' [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/11/files#diff-98c07a35ad1972afa552c71a64bb3b60d1ef733cf9951396d30fce543880c4cbR15)]
+* Use @With in 'Record' [[link](https://github.com/meirlustig1983/spring-and-test-driven-development/pull/11/files#diff-57329cf1fd7e1fe6c7cc9f16ee9e198e872f8ae04256176f4b8f1bddc228674fR9)]
 * Unit tests and integration tests has been added.
