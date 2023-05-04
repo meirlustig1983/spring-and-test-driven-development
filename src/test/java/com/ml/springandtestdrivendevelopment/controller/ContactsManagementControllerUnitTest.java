@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringJUnitConfig
 public class ContactsManagementControllerUnitTest {
@@ -62,6 +61,7 @@ public class ContactsManagementControllerUnitTest {
         assertNotNull(Objects.requireNonNull(result.getBody()).createdDate());
 
         verify(service).addCustomerContact(customerContactDto);
+        verifyNoMoreInteractions(service);
     }
 
     @Test
@@ -80,6 +80,8 @@ public class ContactsManagementControllerUnitTest {
 
         when(service.addCustomerContact(customerContactDto)).thenReturn(null);
         assertThrows(ApiMethodException.class, () -> controller.addCustomerContact(customerContactDto));
+        verify(service).addCustomerContact(customerContactDto);
+        verifyNoMoreInteractions(service);
     }
 
     @Test
@@ -112,6 +114,7 @@ public class ContactsManagementControllerUnitTest {
         assertNotNull(Objects.requireNonNull(result.getBody()).get(0).createdDate());
 
         verify(service).getAllCustomerContacts();
+        verifyNoMoreInteractions(service);
     }
 
     @Test
@@ -124,6 +127,7 @@ public class ContactsManagementControllerUnitTest {
         assertTrue(Objects.requireNonNull(result.getBody()).isEmpty());
 
         verify(service).getAllCustomerContacts();
+        verifyNoMoreInteractions(service);
     }
 
     @Test
@@ -155,12 +159,15 @@ public class ContactsManagementControllerUnitTest {
         assertNotNull(Objects.requireNonNull(result.getBody()).createdDate());
 
         verify(service).getCustomerContactById(1L);
+        verifyNoMoreInteractions(service);
     }
 
     @Test
     public void getCustomerContactById_ShouldFailed() {
         when(service.getCustomerContactById(1L)).thenReturn(null);
         assertThrows(ApiMethodException.class, () -> controller.getCustomerContactById(1L));
+        verify(service).getCustomerContactById(1L);
+        verifyNoMoreInteractions(service);
     }
 
     @Test
@@ -193,12 +200,15 @@ public class ContactsManagementControllerUnitTest {
         assertNotNull(Objects.requireNonNull(result.getBody()).get(0).createdDate());
 
         verify(service).getCustomerContactsByIds(List.of(1L));
+        verifyNoMoreInteractions(service);
     }
 
     @Test
     public void getCustomerContactsByIds_ShouldFailed() {
         when(service.getCustomerContactsByIds(List.of(1L))).thenReturn(List.of());
         assertThrows(ApiMethodException.class, () -> controller.getCustomerContactsByIds(List.of(1L)));
+        verify(service).getCustomerContactsByIds(List.of(1L));
+        verifyNoMoreInteractions(service);
     }
 
     @Test
@@ -230,11 +240,14 @@ public class ContactsManagementControllerUnitTest {
         assertNotNull(Objects.requireNonNull(result.getBody()).createdDate());
 
         verify(service).getCustomerContactByEmail("jd@gmail.com");
+        verifyNoMoreInteractions(service);
     }
 
     @Test
     public void getCustomerContactByEmail_ShouldFailed() {
         when(service.getCustomerContactByEmail("jd@gmail.com")).thenReturn(null);
         assertThrows(ApiMethodException.class, () -> controller.getCustomerContactByEmail("jd@gmail.com"));
+        verify(service).getCustomerContactByEmail("jd@gmail.com");
+        verifyNoMoreInteractions(service);
     }
 }

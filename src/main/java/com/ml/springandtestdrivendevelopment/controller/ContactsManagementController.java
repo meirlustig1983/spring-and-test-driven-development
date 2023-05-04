@@ -39,10 +39,10 @@ public class ContactsManagementController {
         return ResponseEntity.ok().body(customerContactDtoList);
     }
 
-    @GetMapping("/search/{customerContactId}/customerContactId")
-    public ResponseEntity<CustomerContactDto> getCustomerContactById(@PathVariable Long customerContactId) {
-        log.info("ContactsManagementController.getCustomerContactById() - return customer contacts by id. value: {}", customerContactId);
-        val customerContactDto = service.getCustomerContactById(customerContactId);
+    @GetMapping("/search/{id}/customerContactId")
+    public ResponseEntity<CustomerContactDto> getCustomerContactById(@PathVariable Long id) {
+        log.info("ContactsManagementController.getCustomerContactById() - return customer contacts by id. value: {}", id);
+        val customerContactDto = service.getCustomerContactById(id);
         if (customerContactDto == null) {
             throw new ApiMethodException("/search/{customerContactId}/customerContactId", "Search method has been failed, please check your input.", HttpStatus.NOT_FOUND, LocalDateTime.now());
         }
@@ -50,9 +50,9 @@ public class ContactsManagementController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<CustomerContactDto>> getCustomerContactsByIds(@RequestParam List<Long> customerContactIds) {
-        log.info("ContactsManagementController.getCustomerContactsByIds() - return customer contacts by id. value: {}", customerContactIds);
-        val customerContactDtoList = service.getCustomerContactsByIds(customerContactIds);
+    public ResponseEntity<List<CustomerContactDto>> getCustomerContactsByIds(@RequestParam List<Long> ids) {
+        log.info("ContactsManagementController.getCustomerContactsByIds() - return customer contacts by id. value: {}", ids);
+        val customerContactDtoList = service.getCustomerContactsByIds(ids);
         if (customerContactDtoList.isEmpty()) {
             throw new ApiMethodException("/search", "Search method has been failed, please check your input.", HttpStatus.NOT_FOUND, LocalDateTime.now());
         }
