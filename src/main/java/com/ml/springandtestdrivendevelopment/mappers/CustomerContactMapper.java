@@ -2,6 +2,7 @@ package com.ml.springandtestdrivendevelopment.mappers;
 
 import com.ml.springandtestdrivendevelopment.dta.CustomerContact;
 import com.ml.springandtestdrivendevelopment.dto.CustomerContactDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class CustomerContactMapper {
 
+    @Cacheable(value = "ToCustomerContactDto", key = "#entity")
     public CustomerContactDto toDto(CustomerContact entity) {
         return new CustomerContactDto(
                 entity.getId(),
@@ -28,6 +30,7 @@ public class CustomerContactMapper {
         return entities.stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    @Cacheable(value = "ToCustomerContact", key = "#dto")
     public CustomerContact toEntity(CustomerContactDto dto) {
         CustomerContact.CustomerContactBuilder builder = CustomerContact.builder();
         return builder

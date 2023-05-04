@@ -65,7 +65,6 @@ public class ContactsManagementServiceUnitTest {
 
         when(repository.save(customerContact)).thenReturn(customerContact);
         when(mapper.toEntity(customerContactDto)).thenReturn(customerContact);
-        when(mapper.toDto(customerContact)).thenReturn(customerContactDto.withId(1L));
 
         CustomerContactDto result = service.addCustomerContact(customerContactDto);
 
@@ -82,7 +81,6 @@ public class ContactsManagementServiceUnitTest {
 
         verify(repository).save(customerContact);
         verify(mapper).toEntity(customerContactDto);
-        verify(mapper).toDto(customerContact);
         verifyNoMoreInteractions(repository, mapper);
     }
 
@@ -211,27 +209,92 @@ public class ContactsManagementServiceUnitTest {
                 .createdDate(customerContactDto.createdDate())
                 .build();
 
-        when(repository.findAllByIdIn(List.of(1L))).thenReturn(Collections.singletonList(customerContact));
-        when(mapper.toDtos(List.of(customerContact))).thenReturn(List.of(customerContactDto.withId(1L)));
+        when(repository.findCustomerContactById(1L)).thenReturn(Optional.of(customerContact));
+        when(mapper.toDto(customerContact)).thenReturn(customerContactDto.withId(1L));
 
         List<CustomerContactDto> result = service.getCustomerContactsByIds(List.of(1L));
         assertNotNull(result);
         assertEquals(1, result.size());
 
-        verify(repository).findAllByIdIn(List.of(1L));
-        verify(mapper).toDtos(List.of(customerContact));
+        verify(repository).findCustomerContactById(1L);
+        verify(mapper).toDto(customerContact);
+        verifyNoMoreInteractions(repository, mapper);
+    }
+
+    @Test
+    public void getCustomerContactsByIds_AskMoreThanCacheSize() {
+
+        CustomerContactDto customerContactDto1 = new CustomerContactDto(
+                null,
+                "John",
+                "Doe",
+                "jd@gmail.com",
+                "1234 N 12TH ST",
+                null,
+                "New York",
+                "NY",
+                "12345",
+                new Date());
+
+        CustomerContact customerContact1 = CustomerContact.builder()
+                .id(1L)
+                .firstName(customerContactDto1.firstName())
+                .lastName(customerContactDto1.lastName())
+                .email(customerContactDto1.email())
+                .addressLine1(customerContactDto1.addressLine1())
+                .city(customerContactDto1.city())
+                .state(customerContactDto1.state())
+                .zipCode(customerContactDto1.zipCode())
+                .createdDate(customerContactDto1.createdDate())
+                .build();
+
+        CustomerContactDto customerContactDto2 = new CustomerContactDto(
+                null,
+                "John2",
+                "Doe2",
+                "jd2@gmail.com",
+                "1235 N 12TH ST",
+                null,
+                "New York",
+                "NY",
+                "12345",
+                new Date());
+
+        CustomerContact customerContact2 = CustomerContact.builder()
+                .id(2L)
+                .firstName(customerContactDto2.firstName())
+                .lastName(customerContactDto2.lastName())
+                .email(customerContactDto2.email())
+                .addressLine1(customerContactDto2.addressLine1())
+                .city(customerContactDto2.city())
+                .state(customerContactDto2.state())
+                .zipCode(customerContactDto2.zipCode())
+                .createdDate(customerContactDto2.createdDate())
+                .build();
+
+        when(repository.findAllByIdIn(List.of(1L, 2L, 3L, 4L))).thenReturn(List.of(customerContact1, customerContact2));
+        when(mapper.toDto(customerContact1)).thenReturn(customerContactDto1.withId(2L));
+        when(mapper.toDto(customerContact2)).thenReturn(customerContactDto2.withId(2L));
+
+        List<CustomerContactDto> result = service.getCustomerContactsByIds(List.of(1L, 2L, 3L, 4L));
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        verify(repository).findAllByIdIn(List.of(1L, 2L, 3L, 4L));
+        verify(mapper).toDto(customerContact1);
+        verify(mapper).toDto(customerContact2);
         verifyNoMoreInteractions(repository, mapper);
     }
 
     @Test
     public void getCustomerContactsByIds_ShouldFailed() {
-        when(repository.findAllByIdIn(List.of(1L))).thenReturn(List.of());
+        when(repository.findCustomerContactById(1L)).thenReturn(Optional.empty());
 
         List<CustomerContactDto> result = service.getCustomerContactsByIds(List.of(1L));
         assertNotNull(result);
         assertEquals(0, result.size());
 
-        verify(repository).findAllByIdIn(List.of(1L));
+        verify(repository).findCustomerContactById(1L);
         verifyNoMoreInteractions(repository, mapper);
     }
 

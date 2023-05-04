@@ -12,10 +12,10 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "customer_contact", indexes = {
-        @Index(name = "idx_customer_contact_id", columnList = "id"),
-        @Index(name = "idx_customer_contact_email", columnList = "email")
+        @Index(name = "idx_customer_contact_id", columnList = "id", unique = true),
+        @Index(name = "idx_customer_contact_email", columnList = "email", unique = true)
 })
-@BatchSize(size = 10)
+@BatchSize(size = 3)
 public class CustomerContact {
 
     @Id
